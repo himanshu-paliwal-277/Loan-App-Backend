@@ -44,12 +44,33 @@ export const approveLoan = async (req, res) => {
     const loan = await Loan.findById(loanId);
     
     if (!loan) return res.status(404).json({ message: 'Loan not found' });
-    if (loan.status !== 'pending') return res.status(400).json({ message: 'Loan already approved' });
+    if (loan.status === 'approved') return res.status(400).json({ message: 'Loan already approved' });
+    if (loan.status === 'rejected') return res.status(400).json({ message: 'Loan already rejected' });
+    if (loan.status === 'paid') return res.status(400).json({ message: 'Loan already paid' });
     
     loan.status = 'approved';
     await loan.save();
     
-    res.status(200).json({ message: 'Loan approved', loan });
+    res.status(200).json({ message: 'Successfully approved loan', loan });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+export const rejectLoan = async (req, res) => {
+  try {
+    const loanId = req.params.loanId;
+    const loan = await Loan.findById(loanId);
+    
+    if (!loan) return res.status(404).json({ message: 'Loan not found' });
+    if (loan.status === 'rejected') return res.status(400).json({ message: 'Loan already rejected' });
+    if (loan.status === 'approved') return res.status(400).json({ message: 'Loan already approved' });
+    if (loan.status === 'paid') return res.status(400).json({ message: 'Loan already paid' });
+    
+    loan.status = 'rejected';
+    await loan.save();
+    
+    res.status(200).json({ message: 'Successfully rejected loan', loan });
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
   }
@@ -79,6 +100,7 @@ export const getAllLoansDetails = async (req, res) => {
         amount: loan.amount,
         term: loan.term,
         status: loan.status,
+        loanId: loan._id
       };
     }));
     res.status(200).json({ loans: allLoansDetails });

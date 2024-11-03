@@ -47,3 +47,16 @@ export const makeRepayment = async (req, res) => {
     res.status(500).json({ message: 'Server error', error });
   }
 };
+
+export const getAllRepayments = async (req, res) => {
+  try{
+    const loanId = req.params.loanId;
+    if(!loanId) return res.status(400).json({ message: 'Loan ID is required' });
+    
+    const repayments = await Repayment.find({ loan: loanId });
+    return res.status(200).json({ repayments });
+  }
+  catch(error){
+    res.status(500).json({ message: 'Server error', error });
+  }
+}
