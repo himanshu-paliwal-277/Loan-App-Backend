@@ -6,20 +6,23 @@ const emailValidator = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
-    email: { 
-      type: String, 
-      required: true, 
+    email: {
+      type: String,
+      required: true,
       unique: true,
       validate: {
-        validator: function(v) {
-          return emailValidator.test(v); // Use regex to validate the email format
+        validator: function (v) {
+          // Use regex to validate the email format
+          return emailValidator.test(v); 
         },
-        message: props => `${props.value} is not a valid email!` // Custom error message
-      }
+        // Custom error message
+        message: (props) => `${props.value} is not a valid email!`,
+      },
     },
     password: { type: String, required: true },
-    role: { type: String, required: true, default: "customer" }, // customer, admin
-    createdWithSecretKey: { type: Boolean, default: false }
+    // customer, admin
+    role: { type: String, required: true, default: "customer" }, 
+    createdWithSecretKey: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

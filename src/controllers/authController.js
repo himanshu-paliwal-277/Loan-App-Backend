@@ -75,7 +75,7 @@ export const registerAdmin = async (req, res) => {
     // Check if the secret key is correct
     if (secretKey !== SECRET_KEY) {
       return res.status(403).json({ message: "Invalid secret key." });
-    } 
+    }
 
     // Create the admin user
     const user = new User({

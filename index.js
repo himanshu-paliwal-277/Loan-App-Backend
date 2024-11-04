@@ -14,6 +14,7 @@ const app = express();
 const corsOptions = {
   origin: [
     "http://localhost:5173", // Local development URL on port 5173
+    "https://mini-loan-app-react.netlify.app/", // Production URL
   ],
   methods: ["GET", "POST", "PATCH", "DELETE"], // Allowed methods
   credentials: true, // Allow credentials (if needed)
@@ -36,6 +37,5 @@ app.get("/", (req, res) => {
 
 app.listen(PORT, () => {
   console.log("Server running on port " + PORT);
-  // connectDB();
+  connectDB();
 });
-connectDB();
